@@ -1,0 +1,168 @@
+{{>header}}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Lista de Productos</h1>
+
+        <!-- Tabla de Productos -->
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead class="thead-dark bg-dark text-white">
+                    <tr>
+                        <th>ID</th>
+                        <th>Título</th>
+                        <th>Descripción</th>
+                        <th>Precio</th>
+                        <th>Código</th>
+                        <th>Stock</th>
+                        <th>Categoría</th>
+                        <th>Estado</th>
+                        <th>Imagen</th>
+                    </tr>
+                </thead>
+                <tbody id="productos-body">
+                    {{#each productos}}
+                    <tr>
+                        <td>{{this._id}}</td>
+                        <td>{{this.title}}</td>
+                        <td>{{this.description}}</td>
+                        <td>${{this.price}}</td>
+                        <td>{{this.code}}</td>
+                        <td>{{this.stock}}</td>
+                        <td>{{this.category}}</td>
+                        <td>
+                            {{#if this.status}}
+                                <span class="badge bg-success">Activo</span>
+                            {{else}}
+                                <span class="badge bg-danger">Desactivado</span>
+                            {{/if}}
+                        </td>
+                        <td>
+                            {{#if this.thumbnails.length}}
+                                <a href="{{this.thumbnails.[0]}}" target="_blank">
+                                    <img src="{{this.thumbnails.[0]}}" alt="{{this.title}}" class="img-thumbnail" style="max-width: 100px;">
+                                </a>
+                            {{else}}
+                                <span class="text-muted">No hay imagen</span>
+                            {{/if}}
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Formulario para agregar/editar productos -->
+    <form class="row g-3 mx-4" id="producto-form">
+        <h2 class="mb-4">Real Time Products</h2>
+
+        <!-- Nombre del Producto -->
+        <div class="col-md-6">
+            <label for="title" class="form-label">Nombre del Producto</label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-box"></i></span>
+                <input class="form-control" type="text" name="title" id="title" placeholder="Ej. Smartphone" required>
+            </div>
+        </div>
+
+        <!-- Descripción -->
+        <div class="col-md-6">
+            <label for="description" class="form-label">Descripción</label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-file-text"></i></span>
+                <input class="form-control" type="text" name="description" id="description" placeholder="Ej. Último modelo con características avanzadas" required>
+            </div>
+        </div>
+
+        <!-- Stock -->
+        <div class="col-md-6">
+            <label for="stock" class="form-label">Stock</label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-box"></i></span>
+                <input class="form-control" type="number" name="stock" id="stock" placeholder="Ej. 100" required>
+            </div>
+        </div>
+
+        <!-- Imagen (URL) -->
+        <div class="col-md-6">
+            <label for="thumbnail" class="form-label">Imagen (URL)</label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-image"></i></span>
+                <input class="form-control" type="text" name="thumbnail" id="thumbnail" placeholder="Ej. https://example.com/image.jpg" >
+            </div>
+        </div>
+
+        <!-- Categoría -->
+        <div class="col-md-6">
+            <label for="category" class="form-label">Categoría</label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-grid"></i></span>
+                <input class="form-control" type="text" name="category" id="category" placeholder="Ej. Electrónicos" required>
+            </div>
+        </div>
+
+        <!-- Precio -->
+        <div class="col-md-6">
+            <label for="price" class="form-label">Precio</label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-currency-dollar"></i></span>
+                <input class="form-control" type="number" name="price" id="price" placeholder="Ej. 499.99" required>
+            </div>
+        </div>
+
+        <!-- Estado (Checkbox) -->
+        <div class="col-md-6">
+            <div class="form-check mt-4">
+                <input name="status" class="form-check-input" type="checkbox" value="true" id="flexCheckChecked" checked>
+                <label class="form-check-label" for="flexCheckChecked">Estado</label>
+            </div>
+        </div>
+
+        <!-- Código -->
+        <div class="col-md-6">
+            <label for="code" class="form-label">Código</label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-tag"></i></span>
+                <input class="form-control" type="text" name="code" id="code" placeholder="Ej. ABC123" required>
+            </div>
+        </div>
+
+        <!-- Botón Registrar -->
+        <div class="col-12 mt-4">
+            <button class="btn btn-primary" type="submit" id="agregarProducto">Agregar Producto</button>
+        </div>
+
+        <h2 class="mt-4">Eliminar Producto:</h2>
+
+        <!-- ID del Producto a Eliminar -->
+        <div class="col-md-6">
+            <label for="id-prod" class="form-label">ID del Producto</label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-trash"></i></span>
+                <input class="form-control" type="text" name="id-prod" id="id-prod" placeholder="Ej. 123">
+            </div>
+        </div>
+
+        <!-- Botón Eliminar -->
+        <div class="col-12 mt-4">
+            <button class="btn btn-danger" type="button" id="delete-btn">Eliminar</button>
+        </div>
+    </form>
+
+    <div class="row mt-4" id="list-products"></div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/index.js"></script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+{{>header}}
+
+
+<div class="container my-4">
+    <h3 class="text-center mb-4">Lista de Productos</h3>
+
+    <table class="table table-striped table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th>Título</th>
+                <th>Descripción</th>
+                <th>Precio</th>
+                <th>Código</th>
+                <th>Stock</th>
+                <th>Categoría</th>
+                <th>Estado</th>
+                <th>Imagen</th>
+                <th>Agregar</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each result.payload}}
+            <tr>
+                <td>{{this.title}}</td>
+                <td>{{this.description}}</td>
+                <td>${{this.price}}</td>
+                <td>{{this.code}}</td>
+                <td>{{this.stock}}</td>
+                <td>{{this.category}}</td>
+                <td>
+                    {{#if this.status}}
+                        <span class="badge" style="background-color: #17a2b8; color: white;">Activado</span>
+                        {{else}}
+                    <span class="badge" style="background-color: #ffc107; color: black;">Desactivado</span>
+                    {{/if}}
+                </td>
+                <td>
+                    {{#if this.thumbnails.length}}
+                    <a href="{{this.thumbnails.[0]}}" target="_blank" class="text-primary">Ver Imagen</a>
+                    {{else}}
+                    <span class="text-muted">No hay Imagen</span>
+                    {{/if}}
+                </td>
+                <td>
+                    <button class="btn btn-primary btn-sm" onclick="addToCart('{{this._id}}')">
+                        <i class="fas fa-shopping-cart"></i> Agregar
+                    </button>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+
+    <div class="d-flex justify-content-between align-items-center mt-4">
+        <div>
+            <span class="mr-3">Límite por página: {{result.limit}}</span>
+            {{#if result.query}}
+            <span class="mr-3">Filtrado por: {{result.query}}</span>
+            {{/if}}
+        </div>
+        <div class="pagination">
+            {{#if result.hasPrevPage}}
+            <a class="btn btn-outline-primary mr-2" href="?page={{result.prevPage}}&limit={{result.limit}}{{#if result.query}}&query={{result.query}}{{/if}}">Anterior</a>
+            {{/if}}
+
+            <span>Página {{result.page}} de {{result.totalPages}}</span>
+
+            {{#if result.hasNextPage}}
+            <a class="btn btn-outline-primary ml-2" href="?page={{result.nextPage}}&limit={{result.limit}}{{#if result.query}}&query={{result.query}}{{/if}}">Siguiente</a>
+            {{/if}}
+        </div>
+        <script>
+            function addToCart(productoId){
+                const idCart = '66a946ef6327411c31233705'
+               fetch(`/api/carts/${idCart}/product/${productoId}` , {
+                    method:'POST',
+                    headers: {
+                        'Content-Type':'application/json',
+                        },
+                 })
+                 .then(resp => resp.json())
+                 .then(data =>{
+                    console.log(data);
+                 })
+                 .catch(error=>{
+                    console.log('Error:', error)
+                 })
+                 
+            }
+        </script>
+    </div>
+</div>
